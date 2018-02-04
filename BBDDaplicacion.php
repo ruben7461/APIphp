@@ -15,7 +15,7 @@ class BBDDaplicacion {
     public function __construct() {           
         try{
             //conexión a base de datos
-            $this->mysqli = new mysqli(self::LOCALHOST, self::USER, self::PASSWORD, self::DATABASE, self::Puerto);
+            $this->mysqli = new mysqli(self::LOCALHOST, self::USER, self::PASSWORD, self::DATABASE);
         }catch (mysqli_sql_exception $e){
             //Si no se puede realizar la conexión
             http_response_code(500);
