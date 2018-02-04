@@ -12,7 +12,7 @@
  * @author ruben
  */
 
-
+require_once "./BBDDaplicacion.php";  
 class TipoSolicitud {
     
      
@@ -46,10 +46,10 @@ class TipoSolicitud {
           $db = new BBDDaplicacion();
      if($_GET['action']=='usuarios'){ 
          if(isset($_GET['id'])){//muestra 1 solo registro si es que existiera ID                 
-             $response = $db.obtenerPersonaID($_GET['id']);                
+             $response = $db->obtenerPersonaID($_GET['id']);                
              echo json_encode($response,JSON_PRETTY_PRINT);
          }else{ //muestra todos los registros                   
-             $response = $db.ObtenerPersonas();              
+             $response = $db->ObtenerPersonas();              
              echo json_encode($response,JSON_PRETTY_PRINT);
          }
       }
