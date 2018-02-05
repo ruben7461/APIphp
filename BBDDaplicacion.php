@@ -33,15 +33,15 @@ class BBDDaplicacion {
      *
      */
     public function obtenerPersonaID($id= 0){      
-        $stmt = $this->mysqli->prepare("SELECT * FROM tablausuarios WHERE id_usuario= ?;");
+        $stmt = $this->mysqli->prepare("SELECT correo,nombre FROM tablausuarios WHERE id_usuario= ?");
       
         $stmt->bind_param('i', $id);
         $stmt->execute();
         $result = $stmt->get_result();        
         $peoples = $result->fetch_array(MYSQLI_ASSOC); 
-        $stmt->close();
+         $stmt->close();
         return $peoples;   
-        $id = 0;
+      
     }
     
     /**
@@ -49,7 +49,7 @@ class BBDDaplicacion {
      * @return Array array con los registros obtenidos de la base de datos
      */
     public function ObtenerPersonas(){        
-        $result = $this->mysqli->query("SELECT * FROM tablausuarios"); 
+        $result = $this->mysqli->query("SELECT nombre FROM tablausuarios"); 
           $gentecilla = $result->fetch_array(MYSQLI_ASSOC); 
 
 //       $fila= $result->fetch_array(MYSQLI_ASSOC);
@@ -81,7 +81,6 @@ class BBDDaplicacion {
     
     /**
      * elimina un registro dado el ID
-     * @param int $id Identificador unico de registro
      * @return Bool TRUE|FALSE
      */
     public function deleteUsuario($id=0) {
