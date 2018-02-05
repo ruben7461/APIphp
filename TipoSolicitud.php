@@ -53,7 +53,7 @@ class TipoSolicitud {
              echo json_encode($response,JSON_PRETTY_PRINT);
          }else{ //muestra todos los registros                   
              $response = $db->ObtenerPersonas(); 
-             echo json_encode($response["nombre"],JSON_PRETTY_PRINT);
+             echo json_encode($response,JSON_OBJECT_AS_ARRAY);
          }
       }
    }
