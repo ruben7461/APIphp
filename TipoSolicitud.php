@@ -12,7 +12,8 @@
  * @author ruben
  */
 
-require_once "./BBDDaplicacion.php";  
+require_once './BBDDaplicacion.php';
+
 class TipoSolicitud {
     
      
@@ -42,14 +43,18 @@ class TipoSolicitud {
      
     }
     
+   
       function obtnUsuarios(){
-          $db = new BBDDaplicacion();
+         
      if($_GET['action']=='usuarios'){ 
+          $db = new BBDDaplicacion();
          if(isset($_GET['id'])){//muestra 1 solo registro si es que existiera ID                 
              $response = $db->obtenerPersonaID($_GET['id']);                
-             echo json_encode($response,JSON_PRETTY_PRINT);
+             echo json_encode($response["nombre"],JSON_PRETTY_PRINT);
          }else{ //muestra todos los registros                   
-             $response = $db->ObtenerPersonas();              
+             $response[] = $db->ObtenerPersonas();  
+             
+             
              echo json_encode($response,JSON_PRETTY_PRINT);
          }
       }
