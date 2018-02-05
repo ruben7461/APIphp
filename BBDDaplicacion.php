@@ -50,7 +50,13 @@ class BBDDaplicacion {
      */
     public function ObtenerPersonas(){        
         $result = $this->mysqli->query("SELECT nombre FROM tablausuarios"); 
-          $gentecilla = $result->fetch_array(MYSQLI_ASSOC); 
+        
+        
+        
+        while($row = $result->fetch_assoc()){
+            $gentecilla[] = $row;
+        }
+//          $gentecilla = $result->fetch_row(); 
 
 //       $fila= $result->fetch_array(MYSQLI_ASSOC);
             $result->close();
