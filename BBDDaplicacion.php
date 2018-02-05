@@ -6,9 +6,9 @@ class BBDDaplicacion {
     const LOCALHOST = '127.0.0.1';
     const USER = 'root';
     const PASSWORD = '';
-    const DATABASE = 'AplicacionAndroid';
+    const DATABASE = 'aplicacionandroid';
     const Puerto = 3306;
-    public $conectado;
+  
     
     /**
      * Constructor de clase
@@ -17,7 +17,7 @@ class BBDDaplicacion {
         try{
             //conexión a base de datos
             $this->mysqli = new mysqli(self::LOCALHOST, self::USER, self::PASSWORD, self::DATABASE, self::Puerto);
-            $conectado = $this->mysqli;
+            
             
         }catch (mysqli_sql_exception $e){
             //Si no se puede realizar la conexión
@@ -33,28 +33,38 @@ class BBDDaplicacion {
      *
      */
     public function obtenerPersonaID($id= 0){      
-        $stmt = $this->mysqli->prepare("SELECT * FROM TablaUsuarios WHERE id_usuario= ?;");
+        $stmt = $this->mysqli->prepare("SELECT * FROM tablausuarios WHERE id_usuario= ?;");
+      
         $stmt->bind_param('i', $id);
         $stmt->execute();
         $result = $stmt->get_result();        
         $peoples = $result->fetch_array(MYSQLI_ASSOC); 
         $stmt->close();
-        return $peoples;              
+        return $peoples;   
+        $id = 0;
     }
     
     /**
-     * obtiene todos los registros de la tabla "people"
+     * obtiene todos los registros de la tabla "usuarios"
      * @return Array array con los registros obtenidos de la base de datos
      */
     public function ObtenerPersonas(){        
-        $result = $this->mysqli->query("SELECT * FROM TablaUsuarios"); 
+        $result = $this->mysqli->query("SELECT * FROM tablausuarios"); 
+          $gentecilla = $result->fetch_array(MYSQLI_ASSOC); 
+
+//       $fila= $result->fetch_array(MYSQLI_ASSOC);
+            $result->close();
+            return $gentecilla;
+             
+              
         
-        $peoples = $result->fetch_all(MYSQLI_ASSOC); 
-        $result->close();
-            return $peoples;
-  
-         
+      
+                 
+      
+       
     }
+     
+      
     
     /**
      * añade un nuevo registro en la tabla tablausuarios
