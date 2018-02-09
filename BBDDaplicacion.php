@@ -6,7 +6,7 @@ class BBDDaplicacion {
     const LOCALHOST = '127.0.0.1';
     const USER = 'root';
     const PASSWORD = '';
-    const DATABASE = 'aplicacionandroid';
+    const DATABASE = 'AplicacionAndroid';
     const Puerto = 3306;
   
     
@@ -33,7 +33,7 @@ class BBDDaplicacion {
      *
      */
     public function obtenerPersonaID($id= 0){      
-        $stmt = $this->mysqli->prepare("SELECT correo,nombre FROM tablausuarios WHERE id_usuario= ?");
+        $stmt = $this->mysqli->prepare("SELECT correo,nombre FROM TablaUsuarios WHERE id_usuario= ?");
       
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -49,10 +49,8 @@ class BBDDaplicacion {
      * @return Array array con los registros obtenidos de la base de datos
      */
     public function ObtenerPersonas(){        
-        $result = $this->mysqli->query("SELECT nombre FROM tablausuarios"); 
-        
-        
-        
+        $result = $this->mysqli->query("SELECT nombre FROM TablaUsuarios"); 
+
         while($row = $result->fetch_assoc()){
             $gentecilla[] = $row;
         }
@@ -62,16 +60,55 @@ class BBDDaplicacion {
             $result->close();
             return $gentecilla;
              
-              
-        
-      
-                 
-      
-       
+  
+    }
+    
+     public function ObtenerDeportes(){        
+        $result = $this->mysqli->query("SELECT nombreDeporte FROM TablaDeportes"); 
+
+        while($row = $result->fetch_assoc()){
+            $deportes[] = $row;
+        }
+//          $gentecilla = $result->fetch_row(); 
+
+//       $fila= $result->fetch_array(MYSQLI_ASSOC);
+            $result->close();
+            return $deportes;
+             
+ 
+    }
+    
+     public function ObtenerFotosDeportes(){        
+        $result = $this->mysqli->query("SELECT fotoDeporte FROM TablaDeportes"); 
+
+        while($row = $result->fetch_assoc()){
+            $deportes[] = $row;
+        }
+//          $gentecilla = $result->fetch_row(); 
+
+//       $fila= $result->fetch_array(MYSQLI_ASSOC);
+            $result->close();
+            return $deportes;
+             
+ 
     }
      
-      
     
+    //obtiene los amigos del usuario que este iniciando sesion en ese momento
+    //y le mostrara todos los amigos que tiene
+    public function obtenerAmigos($id= 0){      
+        $stmt = $this->mysqli->prepare("SELECT nombre FROM tablausuarios WHERE usuario = (SELECT id_relacion FROM 
+            TablaAmigos_has_TablaUsuarios where TablaUsuarios_id_usuario = ?)");
+      
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();        
+        $peoples = $result->fetch_array(MYSQLI_ASSOC); 
+         $stmt->close();
+        return $peoples;   
+      
+    }
+      
     /**
      * añade un nuevo registro en la tabla tablausuarios
      * @param String $name nombre completo de persona
@@ -85,6 +122,16 @@ class BBDDaplicacion {
         return $r;        
     }
     
+//    añade un nuevo evento en la Tabla Eventos con los parametros que le pasamos al llamar al metodo
+      public function insertarEvento($nombreEvento='',$descripcion='',$deporte='',$N_jugadores=''){
+        $stmt = $this->mysqli->prepare("INSERT INTO tablaeventos(nombreEvento,descripcion,deporte,N_jugadores) VALUES (?,?,?,?)");
+        $stmt->bind_param('sssss',$nombreEvento,$descripcion,$deporte,$N_jugadores);
+        $r = $stmt->execute(); 
+        $stmt->close();
+        return $r;     
+        
+        
+    }
     /**
      * elimina un registro dado el ID
      * @return Bool TRUE|FALSE
