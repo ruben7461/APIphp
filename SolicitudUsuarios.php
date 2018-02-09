@@ -14,7 +14,7 @@
 
 require_once './BBDDaplicacion.php';
 
-class TipoSolicitud {
+class SolicitudUsuarios {
     
      
      
@@ -46,7 +46,7 @@ class TipoSolicitud {
    
       function obtnUsuarios(){
          
-     if($_GET['action']=='usuarios'){ 
+     
           $db = new BBDDaplicacion();
          if(isset($_GET['id'])){//muestra 1 solo registro si es que existiera ID                 
              $response = $db->obtenerPersonaID($_GET['id']);                
@@ -59,4 +59,4 @@ class TipoSolicitud {
    }
        
     
-}
+
