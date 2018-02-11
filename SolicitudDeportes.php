@@ -51,10 +51,12 @@ class TiposDeportes {
          if(isset($_GET['id'])){                 
              $response = $db->ObtenerFotosDeportes($_GET['id']);                
             
-             header('content-type text/html;charset=utf-8');
+            
             //header("Content-type:image/png");
              
-            
+            $imageData = base64_encode(file_get_contents($response[0]));
+            $src = 'data: '.mime_content_type($response[0]).';base64,'.$imageData;
+            echo "<img src=\"$src\" alt=\"\" />";
          }else{ //muestra todos los registros                   
              $response = $db->ObtenerDeportes(); 
              echo json_encode($response,JSON_OBJECT_AS_ARRAY);
