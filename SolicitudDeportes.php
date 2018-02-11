@@ -46,9 +46,19 @@ class TiposDeportes {
    
       function obtnDeportes(){
 
+           
           $db = new BBDDaplicacion();
+         if(isset($_GET['id'])){                 
+             $response = $db->ObtenerFotosDeportes($_GET['id']);                
+            
+             header('content-type text/html;charset=utf-8');
+            //header("Content-type:image/png");
+             
+             echo ;
+         }else{ //muestra todos los registros                   
              $response = $db->ObtenerDeportes(); 
              echo json_encode($response,JSON_OBJECT_AS_ARRAY);
+      }
         
    }
        

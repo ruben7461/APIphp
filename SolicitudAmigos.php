@@ -43,7 +43,9 @@ class TipoAmigos {
      
     }
     
-   
+    
+    
+   //comprueba todos los amigos que tiene ese usuario
       function obtnAmigos(){
          
      if($_GET['action']=='amigos'){ 
@@ -51,12 +53,12 @@ class TipoAmigos {
          if(isset($_GET['id'])){//muestra 1 solo registro si es que existiera ID                 
              //$response = $db->obtenerAmigos($_GET['id']);                
              //echo json_encode($response,JSON_PRETTY_PRINT);
-         }else{ //muestra todos los registros                   
-             $response = $db->obtenerAmigos(); 
-             echo json_encode($response,JSON_OBJECT_AS_ARRAY);
-         }
+//         }else{ //muestra todos los registros                   
+//             $response = $db->obtenerAmigos(); 
+//             echo json_encode($response,JSON_OBJECT_AS_ARRAY);
+//         }
       }
    }
        
-    
+ } 
 }

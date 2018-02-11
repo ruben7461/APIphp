@@ -54,41 +54,38 @@ class BBDDaplicacion {
         while($row = $result->fetch_assoc()){
             $gentecilla[] = $row;
         }
-//          $gentecilla = $result->fetch_row(); 
 
-//       $fila= $result->fetch_array(MYSQLI_ASSOC);
             $result->close();
             return $gentecilla;
              
   
     }
     
+//    obtiene todos los deportes que esten registrados en la BBDD
      public function ObtenerDeportes(){        
         $result = $this->mysqli->query("SELECT nombreDeporte FROM TablaDeportes"); 
 
         while($row = $result->fetch_assoc()){
             $deportes[] = $row;
         }
-//          $gentecilla = $result->fetch_row(); 
 
-//       $fila= $result->fetch_array(MYSQLI_ASSOC);
             $result->close();
             return $deportes;
              
  
     }
     
-     public function ObtenerFotosDeportes(){        
-        $result = $this->mysqli->query("SELECT fotoDeporte FROM TablaDeportes"); 
+    
+//    obtiene las imagenes que pertenezcan al deporte seleccionado
+     public function ObtenerFotosDeportes($id){        
+        $stmt = $this->mysqli->prepare("SELECT fotoDeporte FROM TablaDeportes WHERE nombreDeporte = ?"); 
 
-        while($row = $result->fetch_assoc()){
-            $deportes[] = $row;
-        }
-//          $gentecilla = $result->fetch_row(); 
-
-//       $fila= $result->fetch_array(MYSQLI_ASSOC);
-            $result->close();
-            return $deportes;
+         $stmt->bind_param('s', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();        
+        $fotos = $result->fetch_array(); 
+         $stmt->close();
+        return $fotos;   
              
  
     }
@@ -110,17 +107,20 @@ class BBDDaplicacion {
     }
       
     /**
-     * añade un nuevo registro en la tabla tablausuarios
+     * añade un nuevo registro en la tabla Amigos
      * @param String $name nombre completo de persona
      * @return bool TRUE|FALSE 
      */
-    public function insertarUsuario($correo='',$nombre='',$apellido='',$password='',$nacionalidad=''){
-        $stmt = $this->mysqli->prepare("INSERT INTO tablausuarios(correo,nombre,apellidos,password,nacionalidad) VALUES (?,?,?,?,?)");
-        $stmt->bind_param('sssss',$correo,$nombre,$apellido,$password,$nacionalidad);
+    public function insertarUsuario($idAmigo,$idUsuario){
+        $stmt = $this->mysqli->prepare("INSERT INTO TablaAmigos_has_TablaUsuarios(
+        TablaAmigos_id_relacion,TablaUsuarios_id_usuario) VALUES (?,?)");
+        $stmt->bind_param('ii',$idAmigo,$idUsuario);
         $r = $stmt->execute(); 
         $stmt->close();
         return $r;        
     }
+    
+    
     
 //    añade un nuevo evento en la Tabla Eventos con los parametros que le pasamos al llamar al metodo
       public function insertarEvento($nombreEvento='',$descripcion='',$deporte='',$N_jugadores=''){
@@ -131,6 +131,16 @@ class BBDDaplicacion {
         return $r;     
         
         
+    }
+    
+    
+    
+     public function insertarAmigos($correo='',$nombre='',$apellido='',$password='',$nacionalidad=''){
+        $stmt = $this->mysqli->prepare("INSERT INTO tablausuarios(correo,nombre,apellidos,password,nacionalidad) VALUES (?,?,?,?,?)");
+        $stmt->bind_param('sssss',$correo,$nombre,$apellido,$password,$nacionalidad);
+        $r = $stmt->execute(); 
+        $stmt->close();
+        return $r;        
     }
     /**
      * elimina un registro dado el ID
@@ -148,7 +158,7 @@ class BBDDaplicacion {
      * Actualizar registro dado su ID
      * @param int $id Description
      */
-    public function updateUsuario($id, $nombreNuevo) {
+    public function updateNmobre($id, $nombreNuevo) {
         if($this->checkID($id)){
             $stmt = $this->mysqli->prepare("UPDATE tablausuarios SET nombre=? WHERE id_usuario = ? ; ");
             $stmt->bind_param('si', $nombreNuevo,$id);
@@ -159,22 +169,22 @@ class BBDDaplicacion {
         return false;
     }
     
-    /**
-     * verifica si un ID existe
-     * @param int $id Identificador unico de registro
-     * @return Bool TRUE|FALSE
-     */
-    public function compruebaExistenciaID($id){
-        $stmt = $this->mysqli->prepare("SELECT * FROM tablausuarios WHERE id_usuario=?");
-        $stmt->bind_param("i", $id);
-        if($stmt->execute()){
-            $stmt->store_result();    
-            if ($stmt->num_rows == 1){                
-                return true;
-            }
-        }        
-        return false;
-    }
+//    /**
+//     * verifica si un ID existe
+//     * @param int $id Identificador unico de registro
+//     * @return Bool TRUE|FALSE
+//     */
+//    public function compruebaExistenciaID($id){
+//        $stmt = $this->mysqli->prepare("SELECT * FROM tablausuarios WHERE id_usuario=?");
+//        $stmt->bind_param("i", $id);
+//        if($stmt->execute()){
+//            $stmt->store_result();    
+//            if ($stmt->num_rows == 1){                
+//                return true;
+//            }
+//        }        
+//        return false;
+//    }
     
    
       
