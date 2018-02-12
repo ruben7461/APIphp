@@ -32,10 +32,10 @@ class BBDDaplicacion {
      * obtiene un solo registro dado su ID
      *
      */
-    public function obtenerPersonaID($id= 0){      
-        $stmt = $this->mysqli->prepare("SELECT correo,nombre FROM TablaUsuarios WHERE id_usuario= ?");
+    public function obtenerPersonaID($id=""){      
+        $stmt = $this->mysqli->prepare("SELECT correo,nombre FROM TablaUsuarios WHERE correo= ?");
       
-        $stmt->bind_param('i', $id);
+        $stmt->bind_param('s', $id);
         $stmt->execute();
         $result = $stmt->get_result();        
         $peoples = $result->fetch_array(MYSQLI_ASSOC); 
@@ -77,7 +77,7 @@ class BBDDaplicacion {
     
     
 //    obtiene las imagenes que pertenezcan al deporte seleccionado
-     public function ObtenerFotosDeportes($id){        
+     public function ObtenerFotosDeportes($id=""){        
         $stmt = $this->mysqli->prepare("SELECT fotoDeporte FROM TablaDeportes WHERE nombreDeporte = ?"); 
 
          $stmt->bind_param('s', $id);
@@ -85,7 +85,10 @@ class BBDDaplicacion {
         $result = $stmt->get_result();        
         $fotos = $result->fetch_array(); 
          $stmt->close();
-        return $fotos;   
+        $fotito= base64_encode($fotos[0]);  
+        header("Content-Type: text/html; charset=utf-8");
+        echo '<img width="60" src="data:image/gif;base64,' . $fotito . '" />';
+       
              
  
     }

@@ -48,15 +48,8 @@ class TiposDeportes {
 
            
           $db = new BBDDaplicacion();
-         if(isset($_GET['id'])){                 
-             $response = $db->ObtenerFotosDeportes($_GET['id']);                
-            
-            
-            //header("Content-type:image/png");
-             
-            $imageData = base64_encode(file_get_contents($response[0]));
-            $src = 'data: '.mime_content_type($response[0]).';base64,'.$imageData;
-            echo "<img src=\"$src\" alt=\"\" />";
+         if(isset($_GET['categoria'])){                 
+             $response = $db->ObtenerFotosDeportes($_GET['categoria']);                
          }else{ //muestra todos los registros                   
              $response = $db->ObtenerDeportes(); 
              echo json_encode($response,JSON_OBJECT_AS_ARRAY);
