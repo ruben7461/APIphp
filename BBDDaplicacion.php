@@ -32,8 +32,8 @@ class BBDDaplicacion {
      * obtiene un solo registro dado su ID
      *
      */
-    public function obtenerPersonaID($id=""){      
-        $stmt = $this->mysqli->prepare("SELECT correo,nombre FROM TablaUsuarios WHERE correo= ?");
+    public function obtenerPersonaID($id){      
+        $stmt = $this->mysqli->prepare("SELECT correo,nombre FROM TablaUsuarios WHERE id_usuario= ?");
       
         $stmt->bind_param('s', $id);
         $stmt->execute();
@@ -61,16 +61,27 @@ class BBDDaplicacion {
   
     }
     
-//    obtiene todos los deportes que esten registrados en la BBDD
+//    obtiene todos los deportes que esten registrados en la BBDD junto con las fotos asociadas a ella
      public function ObtenerDeportes(){        
-        $result = $this->mysqli->query("SELECT nombreDeporte FROM TablaDeportes"); 
+        $result = $this->mysqli->query("SELECT nombreDeporte,fotoDeporte FROM TablaDeportes"); 
 
+        
         while($row = $result->fetch_assoc()){
-            $deportes[] = $row;
+            $fotitos[] = base64_encode($row['fotoDeporte']);
+           $deportes[] = $row['nombreDeporte'];
+   
+        }
+        
+        for($i =0;$i<count($deportes);$i++){
+            for($j=$i;$j<=$i;$j++){
+                $resultado[] = "{" ."nombreDeporte:" . $deportes[$i] . "," . " fotoDeporte: " . $fotitos[$j] . "}";
+            }
         }
 
+       
+        
             $result->close();
-            return $deportes;
+           return $resultado;
              
  
     }
@@ -86,9 +97,12 @@ class BBDDaplicacion {
         $fotos = $result->fetch_array(); 
          $stmt->close();
         $fotito= base64_encode($fotos[0]);  
-        header("Content-Type: text/html; charset=utf-8");
-        echo '<img width="60" src="data:image/gif;base64,' . $fotito . '" />';
+        //header("Content-Type: text/html; charset=utf-8");
+        
+        return $fotito;
+        //echo '<img width="60" src="data:image/gif;base64,' . $fotito . '" />';
        
+        
              
  
     }
