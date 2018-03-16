@@ -49,10 +49,15 @@ class TiposDeportes {
            
           $db = new BBDDaplicacion();
          if(isset($_GET['categoria'])){                 
-             $response = $db->ObtenerFotosDeportes($_GET['categoria']);                
+             $response = $db->ObtenerFotosDeportes($_GET['categoria']);  
+            echo $response;
          }else{ //muestra todos los registros                   
              $response = $db->ObtenerDeportes(); 
+             
+             
              echo json_encode($response,JSON_OBJECT_AS_ARRAY);
+             
+             
       }
         
    }
