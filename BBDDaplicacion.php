@@ -67,14 +67,19 @@ class BBDDaplicacion {
 
         
         while($row = $result->fetch_assoc()){
+            
+            //guardamos la columna de  fotosDeporte recibidas en un arreglo y lo decodificamos en el formato base 64
             $fotitos[] = base64_encode($row['fotoDeporte']);
+   
+            //guardamos la columna de  nombreDeporte recibidas en un arreglo
            $deportes[] = $row['nombreDeporte'];
    
         }
         
+        //hacemos un 2 ciclos for para recorrer cada arreglo y guardarlas en un array en conjunto
         for($i =0;$i<count($deportes);$i++){
             for($j=$i;$j<=$i;$j++){
-                $resultado[] = "{" ."nombreDeporte:" . $deportes[$i] . "," . " fotoDeporte: " . $fotitos[$j] . "}";
+                $resultado[] = "{" ."nombreDeporte: " . $deportes[$i] . "," . " fotoDeporte: " . $fotitos[$j] . "}";
             }
         }
 
