@@ -1,6 +1,6 @@
 <?php
 
-
+require './Deporte.php';
 class BBDDaplicacion {
       protected $mysqli;
     const LOCALHOST = '127.0.0.1';
@@ -17,7 +17,7 @@ class BBDDaplicacion {
         try{
             //conexión a base de datos
             $this->mysqli = new mysqli(self::LOCALHOST, self::USER, self::PASSWORD, self::DATABASE, self::Puerto);
-            
+            header("Content-Type: text/html; charset=utf-8");
             
         }catch (mysqli_sql_exception $e){
             //Si no se puede realizar la conexión
@@ -63,30 +63,30 @@ class BBDDaplicacion {
     
 //    obtiene todos los deportes que esten registrados en la BBDD junto con las fotos asociadas a ella
      public function ObtenerDeportes(){        
-        $result = $this->mysqli->query("SELECT nombreDeporte,fotoDeporte FROM TablaDeportes"); 
+        $result = $this->mysqli->query("SELECT * FROM TablaDeportes;"); 
 
         
-        while($row = $result->fetch_assoc()){
+       $resultado = $result->fetch_all();
             
+        foreach ($resultado as $row) {
+            $deportes[] = new Deporte($row[0], base64_encode($row[1]));
             //guardamos la columna de  fotosDeporte recibidas en un arreglo y lo decodificamos en el formato base 64
-            $fotitos[] = base64_encode($row['fotoDeporte']);
-   
-            //guardamos la columna de  nombreDeporte recibidas en un arreglo
-           $deportes[] = $row['nombreDeporte'];
-   
+            $fotitos[] =base64_encode($row['fotoDeporte']);
         }
+            //guardamos la columna de  nombreDeporte recibidas en un arreglo
+           //$deportes[] = $row['nombreDeporte'];
+   
+        
         
         //hacemos un 2 ciclos for para recorrer cada arreglo y guardarlas en un array en conjunto
-        for($i =0;$i<count($deportes);$i++){
-            for($j=$i;$j<=$i;$j++){
-                $resultado[] = "{" ."nombreDeporte: " . $deportes[$i] . "," . " fotoDeporte: " . $fotitos[$j] . "}";
-            }
-        }
+//        for($i =0;$i<count($deportes);$i++){
+//            for($j=$i;$j<=$i;$j++){
+//                $resultado[] = " nombreDeporte: " . $deportes[$i] . "," . " fotoDeporte: " . $fotitos[$j];
+//            }
+//        }
 
-       
-        
             $result->close();
-           return $resultado;
+           return $deportes;
              
  
     }
@@ -94,17 +94,27 @@ class BBDDaplicacion {
     
 //    obtiene las imagenes que pertenezcan al deporte seleccionado
      public function ObtenerFotosDeportes($id=""){        
-        $stmt = $this->mysqli->prepare("SELECT fotoDeporte FROM TablaDeportes WHERE nombreDeporte = ?"); 
+        $stmt = $this->mysqli->prepare("SELECT * FROM TablaDeportes WHERE nombreDeporte = ?;"); 
 
          $stmt->bind_param('s', $id);
+         $array = array($id);
         $stmt->execute();
         $result = $stmt->get_result();        
-        $fotos = $result->fetch_array(); 
-         $stmt->close();
-        $fotito= base64_encode($fotos[0]);  
+        $fotos = $result->fetch_all(); 
+        
+        
+         $arr_usuarios = array();  //array to parse jason from
+                foreach ($fotos as $row) {
+                    $usr = new Deporte($row[0], base64_encode($row[1]));
+                    $arr_usuarios[] = $usr;
+                
+             }
+           
+       $stmt->close();
         //header("Content-Type: text/html; charset=utf-8");
         
-        return $fotito;
+       //echo json_encode($arr_usuarios);
+        return $arr_usuarios;
         //echo '<img width="60" src="data:image/gif;base64,' . $fotito . '" />';
        
         
