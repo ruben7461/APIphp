@@ -1,6 +1,7 @@
 <?php
 
 require './Deporte.php';
+require './Usuarios.php';
 class BBDDaplicacion {
       protected $mysqli;
     const LOCALHOST = '127.0.0.1';
@@ -49,12 +50,13 @@ class BBDDaplicacion {
      * @return Array array con los registros obtenidos de la base de datos
      */
     public function ObtenerPersonas(){        
-        $result = $this->mysqli->query("SELECT nombre FROM TablaUsuarios"); 
+        $result = $this->mysqli->query("SELECT * FROM TablaUsuarios;"); 
 
-        while($row = $result->fetch_assoc()){
-            $gentecilla[] = $row;
-        }
-
+      $resultado = $result->fetch_all();
+      
+      foreach ($resultado as $row){
+         $gentecilla[] = new Usuarios($row[2], $row[3], base64_encode($row[6]));
+      }
             $result->close();
             return $gentecilla;
              
