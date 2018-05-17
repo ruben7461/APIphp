@@ -26,7 +26,8 @@ class SolicitudEvento {
             $this->obtnEventos();
             break;     
         case 'POST'://inserta
-            echo 'POST';
+            $this->insertarEvento();
+           // echo 'POST';
             break;                
         case 'PUT'://actualiza
             echo 'PUT';
@@ -58,5 +59,11 @@ class SolicitudEvento {
       }
    }
        
+   function insertarEvento(){
+       
+       $db = new BBDDaplicacion();
+       
+      
+   }
     
 }

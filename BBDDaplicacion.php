@@ -2,7 +2,9 @@
 
 require './Deporte.php';
 require './Usuarios.php';
+require './Constantes.php';
 class BBDDaplicacion {
+    
       protected $mysqli;
     const LOCALHOST = '127.0.0.1';
     const USER = 'root';
@@ -10,6 +12,7 @@ class BBDDaplicacion {
     const DATABASE = 'AplicacionAndroid';
     const Puerto = 3306;
   
+    
     
     /**
      * Constructor de clase
@@ -157,12 +160,19 @@ class BBDDaplicacion {
     
     
 //    añade un nuevo evento en la Tabla Eventos con los parametros que le pasamos al llamar al metodo
-      public function insertarEvento($nombreEvento='',$descripcion='',$deporte='',$N_jugadores=''){
-        $stmt = $this->mysqli->prepare("INSERT INTO tablaeventos(nombreEvento,descripcion,deporte,N_jugadores) VALUES (?,?,?,?)");
-        $stmt->bind_param('sssss',$nombreEvento,$descripcion,$deporte,$N_jugadores);
-        $r = $stmt->execute(); 
+      public function insertarEvento($idCreador='',$deporte=''){
+        $stmt = $this->mysqli->prepare("INSERT INTO TablaEventos(id_creador,deporte) VALUES (?,?)");
+        $stmt->bind_param('ss',$idCreador,$deporte);
+        $r = $stmt->execute();
+        
         $stmt->close();
-        return $r;     
+        if ($stmt->execute()){
+                return ;
+                 return USER_CREATION_FAILED;
+        }
+        return USER_EXIST;
+        
+           
         
         
     }
@@ -170,7 +180,7 @@ class BBDDaplicacion {
     
     
      public function insertarAmigos($correo='',$nombre='',$apellido='',$password='',$nacionalidad=''){
-        $stmt = $this->mysqli->prepare("INSERT INTO tablausuarios(correo,nombre,apellidos,password,nacionalidad) VALUES (?,?,?,?,?)");
+        $stmt = $this->mysqli->prepare("INSERT INTO TablaUsuarios(correo,nombre,apellidos,password,nacionalidad) VALUES (?,?,?,?,?)");
         $stmt->bind_param('sssss',$correo,$nombre,$apellido,$password,$nacionalidad);
         $r = $stmt->execute(); 
         $stmt->close();
